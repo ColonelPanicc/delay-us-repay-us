@@ -28,18 +28,16 @@ jobs:
                       target/
                   key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
                   restore-keys: ${{ runner.os }}-cargo-
-            - name: Machete
-              uses: bnjbvr/cargo-machete@main
             - name: Install cargo-nextest
               uses: taiki-e/install-action@nextest
             - name: Test
-              run: cargo nextest run --verbose
-            - name: Doc tests (skipped by nextest)
-              run: cargo test --doc
+              run: cargo nextest run --verbose # does not run doc tests
             - name: Clippy
-              run: cargo clippy --verbose -- -D warnings
+              run: cargo clippy --verbose -- -D warnings -W clippy::pedantic
             - name: Check fmt
               run: cargo fmt --all -- --check
+            - name: Machete
+              uses: bnjbvr/cargo-machete@main
             - name: Deny
               uses: EmbarkStudios/cargo-deny-action@v2
               with:
