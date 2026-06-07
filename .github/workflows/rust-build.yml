@@ -1,0 +1,46 @@
+name: Rust Build
+
+on:
+    workflow_call:
+    workflow_dispatch:
+
+env:
+    CARGO_TERM_COLOR: always
+
+jobs:
+    build-test-lint-deny:
+        name: Build, test, lint, deny
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Update Rust
+              run: rustup update stable
+            - name: Checkout code
+              uses: actions/checkout@v6
+            - name: Use dependencies cache
+              uses: actions/cache@v5
+              with:
+                  path: |
+                      ~/.cargo/bin/
+                      ~/.cargo/registry/index/
+                      ~/.cargo/registry/cache/
+                      ~/.cargo/git/db/
+                      target/
+                  key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+                  restore-keys: ${{ runner.os }}-cargo-
+            - name: Machete
+              uses: bnjbvr/cargo-machete@main
+            - name: Install cargo-nextest
+              uses: taiki-e/install-action@nextest
+            - name: Test
+              run: cargo nextest run --verbose
+            - name: Doc tests (skipped by nextest)
+              run: cargo test --doc
+            - name: Clippy
+              run: cargo clippy --verbose -- -D warnings
+            - name: Check fmt
+              run: cargo fmt --all -- --check
+            - name: Deny
+              uses: EmbarkStudios/cargo-deny-action@v2
+              with:
+                  command: check advisories
