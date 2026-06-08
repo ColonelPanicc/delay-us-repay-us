@@ -37,5 +37,21 @@ hooks = [
     entry = "cargo clippy --verbose -- -D warnings -W clippy::pedantic",
     types = ["rust"],
     pass_filenames = false,
+  },
+  {
+    id = "cargo-machete",
+    name = "cargo machete",
+    language = "system",
+    entry = "cargo machete",
+    types = ["rust"],
+    pass_filenames = false,
+  },
+  {
+    id = "cargo-deny-check-advisories",
+    name = "cargo deny check advisories",
+    language = "system",
+    entry = "cargo deny check advisories",
+    types = ["rust"],
+    pass_filenames = false,
   }
 ]

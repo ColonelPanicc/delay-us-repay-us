@@ -1,4 +1,4 @@
-name: Rust Build, Test
+name: Prek
 
 on:
     workflow_call:
@@ -8,8 +8,8 @@ env:
     CARGO_TERM_COLOR: always
 
 jobs:
-    rust-build-test:
-        name: Build, Test
+    prek:
+        name: Prek
         runs-on: ubuntu-latest
 
         steps:
@@ -28,7 +28,9 @@ jobs:
                       target/
                   key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
                   restore-keys: ${{ runner.os }}-cargo-
-            - name: Install cargo-nextest
-              uses: taiki-e/install-action@nextest
-            - name: Test
-              run: cargo nextest run --verbose # does not run doc tests
+            - name: Install cargo-deny
+              uses: taiki-e/install-action@cargo-deny
+            - name: Install cargo-machete
+              uses: taiki-e/install-action@cargo-machete
+            - name: Run Prek
+              uses: j178/prek-action@v2
