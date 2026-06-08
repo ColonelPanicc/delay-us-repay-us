@@ -1,4 +1,6 @@
 [workspace]
-members = []
+resolver = "3"
+members = ["crates/example-crate"]
 
 [workspace.dependencies]
+pretty_assertions  = "1.4.1"
