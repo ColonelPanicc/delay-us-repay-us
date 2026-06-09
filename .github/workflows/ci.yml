@@ -53,9 +53,12 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.rust-build == 'true' }}
         uses: ./.github/workflows/rust-build.yml
 
+    prek:
+        uses: ./.github/workflows/prek.yml
+
     success:
         name: Check success
-        needs: [detect-changes, rust-build]
+        needs: [detect-changes, rust-build, prek]
         if: always()
         runs-on: ubuntu-slim
         steps:

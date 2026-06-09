@@ -27,15 +27,35 @@ hooks = [
     name = "cargo fmt",
     language = "system",
     entry = "cargo fmt --all",
-    types = ["rust"],
+    files =  { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
     pass_filenames = false,
+    priority = 10, # modifies files - must be only hook to modify files at this priority
   },
   {
     id = "cargo-clippy",
     name = "cargo clippy pedantic",
     language = "system",
     entry = "cargo clippy --verbose -- -D warnings -W clippy::pedantic",
-    types = ["rust"],
+    files =  { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
     pass_filenames = false,
+    priority = 0,
+  },
+  {
+    id = "cargo-machete",
+    name = "cargo machete",
+    language = "system",
+    entry = "cargo machete",
+    files =  { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
+    pass_filenames = false,
+    priority = 0,
+  },
+  {
+    id = "cargo-deny-check-advisories",
+    name = "cargo deny check advisories",
+    language = "system",
+    entry = "cargo deny check advisories",
+    files =  { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml", "**/deny.toml"] },
+    pass_filenames = false,
+    priority = 0,
   }
 ]

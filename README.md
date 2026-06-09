@@ -24,3 +24,10 @@ Try running `prek` hooks manually
 ```bash
 prek run
 ```
+
+You may need to install some tools that `prek` runs, for example
+
+```bash
+cargo install --locked cargo-deny
+cargo install --locked cargo-machete
+```
