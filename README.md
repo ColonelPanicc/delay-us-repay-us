@@ -40,4 +40,8 @@ Try running `duru-cli` from the repo root directory as follows
 cargo r -p duru-cli -- --help
 ```
 
-It might be worth adding an alias to your shell to invoke this more easily
+We also provide a cargo alias to run this more easily
+
+```bash
+cargo duru --help
+```
