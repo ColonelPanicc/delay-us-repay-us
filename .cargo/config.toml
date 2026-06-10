@@ -1,0 +1,2 @@
+[alias]
+duru = "r -p duru-cli --"
