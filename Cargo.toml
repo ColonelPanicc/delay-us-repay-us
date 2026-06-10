@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
-members = ["crates/example-crate"]
+members = ["crates/duru-cli","crates/example-crate"]
 
 [workspace.dependencies]
+clap = "4.6.1"
 pretty_assertions  = "1.4.1"

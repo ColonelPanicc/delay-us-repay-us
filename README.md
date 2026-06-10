@@ -31,3 +31,17 @@ You may need to install some tools that `prek` runs, for example
 cargo install --locked cargo-deny
 cargo install --locked cargo-machete
 ```
+
+### DURU CLI
+
+Try running `duru-cli` from the repo root directory as follows
+
+```bash
+cargo r -p duru-cli -- --help
+```
+
+We also provide a cargo alias to run this more easily
+
+```bash
+cargo duru --help
+```
