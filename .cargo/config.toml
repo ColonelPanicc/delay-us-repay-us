@@ -1,3 +1,4 @@
 [alias]
 duru = "r -p duru-cli --"
+lint = "clippy --verbose -- -D warnings -W clippy::pedantic"
 testcov = "llvm-cov nextest --lcov --output-path coverage/lcov.info --no-cfg-coverage"
