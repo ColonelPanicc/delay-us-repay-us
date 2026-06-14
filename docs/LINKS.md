@@ -1,11 +1,11 @@
 # Random and useful links
 
-Train codes/train data structures:
+## Train codes/train data structures:
 
-https://www.rspaccreditation.org/downloadPublic.php?did=HzxXdfXPg3bsnSVOPxnjm4aOOkfRTTiDXVeNYOfmQ7ONw83eQ1
+[National Routing Guide Data Feed Spec](https://www.rspaccreditation.org/downloadPublic.php?did=HzxXdfXPg3bsnSVOPxnjm4aOOkfRTTiDXVeNYOfmQ7ONw83eQ1)
 
-https://www.raildeliverygroup.com/files/Publications/services/rsp/RSPS504702-00NationalRoutingGuideDataFeedSpecification.pdf
+[ASSIST - documentation related to Ticket Issuing Systems, from the rail delivery group](https://www.rspaccreditation.org/publicDocumentation.php)
 
-https://crs.codes/
+[Full list of CRS codes, used to identify stations](https://crs.codes/)
 
-http://www.railwaycodes.org.uk/crs/crs0.shtm
+[Another list of CRS codes, and other associated codes](http://www.railwaycodes.org.uk/crs/crs0.shtm)
