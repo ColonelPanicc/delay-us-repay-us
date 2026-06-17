@@ -9,7 +9,7 @@ use crate::Cli;
 #[derive(Args)]
 pub struct CompletionsCommand {
     /// Shell to generate completions for.
-    #[arg(short, long, value_enum)]
+    #[arg(value_enum)]
     pub shell: Shell,
 }
 
