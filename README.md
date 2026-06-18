@@ -45,3 +45,19 @@ We also provide a cargo alias to run this more easily
 ```bash
 cargo duru --help
 ```
+
+For active use, it is recommended to use the completions subcommand to generate completions for your shell. Example shown for zsh - requires `~/.zsh/completions` to be on `fpath` in your `.zshrc` before running `compinit`. Note this will only return completions if your shell has an alias `duru-cli`, or you run the `duru-cli` binary directly.
+
+```bash
+cargo duru completions zsh > ~/.zsh/completions/_duru-cli
+```
+
+For active development, it may also be useful to shim the `duru-cli` binary such that a `cargo build` occurs before running the binary. Example shown for zsh. Keeping the shim named the same as the binary enables the completions to work for the shim.
+
+```bash
+duru-cli() {
+    REPO_ROOT="$HOME/git/delay-us-repay-us"
+    cargo build --manifest-path="$REPO_ROOT/crates/duru-cli/Cargo.toml" || return
+    "$REPO_ROOT/target/debug/duru-cli" "$@"
+}
+```
