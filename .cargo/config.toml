@@ -1,2 +1,3 @@
 [alias]
 duru = "r -p duru-cli --"
+testcov = "llvm-cov nextest --lcov --output-path coverage/lcov.info --no-cfg-coverage"
