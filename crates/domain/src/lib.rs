@@ -1,10 +1,7 @@
 use std::time::Duration;
 
 #[derive(Clone, Debug)]
-pub struct RailwayStation {
-    pub short_code: [char; 3],
-    pub full_name: String,
-}
+pub struct RailwayStationId(pub [char; 3]);
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum DelayRepayMode {
@@ -31,42 +28,29 @@ pub struct RailwayOperator {
 
 #[derive(Clone, Debug)]
 pub struct Route {
-    pub starting_station: RailwayStation,
-    pub terminus: RailwayStation,
-    pub stops: Vec<RailwayStation>,
+    pub starting_station: RailwayStationId,
+    pub terminus: RailwayStationId,
+    pub stops: Vec<RailwayStationId>,
     pub operator: RailwayOperator,
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{DelayRepayMode, RailwayOperator, RailwayStation, Route};
+    use crate::{DelayRepayMode, RailwayOperator, RailwayStationId, Route};
     use pretty_assertions::assert_eq;
     use std::time::Duration;
 
     #[test]
     fn can_construct_railway_station() {
-        let station = RailwayStation {
-            short_code: ['L', 'S', 'T'],
-            full_name: "London Liverpool Street".to_string(),
-        };
-        assert_eq!(station.short_code.len(), 3);
-        assert_eq!(station.full_name, "London Liverpool Street");
+        let station = RailwayStationId(['L', 'S', 'T']);
+        assert_eq!(station.0.len(), 3);
     }
 
     #[test]
     fn can_construct_routes() {
-        let start = RailwayStation {
-            short_code: ['L', 'S', 'T'],
-            full_name: "London Liverpool Street".to_string(),
-        };
-        let mid = RailwayStation {
-            short_code: ['S', 'R', 'A'],
-            full_name: "Stratford (London)".to_string(),
-        };
-        let end = RailwayStation {
-            short_code: ['S', 'N', 'F'],
-            full_name: "Shenfield".to_string(),
-        };
+        let start = RailwayStationId(['L', 'S', 'T']);
+        let mid = RailwayStationId(['S', 'R', 'A']);
+        let end = RailwayStationId(['S', 'N', 'F']);
 
         let operator = RailwayOperator {
             short_code: "GA".to_string(),
@@ -81,8 +65,6 @@ mod tests {
             stops: vec![start, mid, end],
         };
 
-        assert_eq!(route.starting_station.full_name, "London Liverpool Street");
-        assert_eq!(route.terminus.full_name, "Shenfield");
         assert_eq!(route.operator.short_code, "GA");
         assert_eq!(route.operator.full_name, "Greater Anglia");
         assert_eq!(route.operator.delay_repay_mode, DelayRepayMode::DR15);
