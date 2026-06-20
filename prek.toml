@@ -1,70 +1,70 @@
 [[repos]]
 repo = "builtin"
 hooks = [
-    { id = "trailing-whitespace" },
-    { id = "check-added-large-files" },
-    { id = "check-case-conflict" },
-    { id = "end-of-file-fixer" },
-    { id = "forbid-new-submodules" },
-    { id = "check-toml", exclude = "Cargo.toml" },
-    { id = "check-json" },
-    { id = "check-vcs-permalinks" },
-    { id = "check-yaml" },
-    { id = "check-xml" },
-    { id = "mixed-line-ending" },
-    { id = "check-symlinks" },
-    { id = "destroyed-symlinks" },
-    { id = "detect-private-key" },
-    { id = "check-shebang-scripts-are-executable" },
-    { id = "check-executables-have-shebangs" },
+  { id = "trailing-whitespace" },
+  { id = "check-added-large-files" },
+  { id = "check-case-conflict" },
+  { id = "end-of-file-fixer" },
+  { id = "forbid-new-submodules" },
+  { id = "check-toml", exclude = "Cargo.toml" },
+  { id = "check-json" },
+  { id = "check-vcs-permalinks" },
+  { id = "check-yaml" },
+  { id = "check-xml" },
+  { id = "mixed-line-ending" },
+  { id = "check-symlinks" },
+  { id = "destroyed-symlinks" },
+  { id = "detect-private-key" },
+  { id = "check-shebang-scripts-are-executable" },
+  { id = "check-executables-have-shebangs" },
 ]
 
 [[repos]]
 repo = "local"
 hooks = [
-    {
-        id = "cargo-fmt",
-        name = "cargo fmt",
-        language = "system",
-        entry = "cargo fmt --all",
-        files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
-        pass_filenames = false,
-        priority = 10, # modifies files - must be only hook to modify files at this priority
-    },
-    {
-        id = "cargo-sort",
-        name = "cargo sort",
-        language = "system",
-        entry = "cargo sort --grouped --workspace",
-        files.glob = ["**/Cargo.toml"],
-        pass_filenames = false,
-        priority = 15 # modifies files - must be only hook to modify files at this priority
-    },
-    {
-        id = "cargo-clippy",
-        name = "cargo clippy pedantic",
-        language = "system",
-        entry = "cargo clippy --verbose --all-targets -- -D warnings -W clippy::pedantic",
-        files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
-        pass_filenames = false,
-        priority = 0,
-    },
-    {
-        id = "cargo-machete",
-        name = "cargo machete",
-        language = "system",
-        entry = "cargo machete",
-        files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
-        pass_filenames = false,
-        priority = 0,
-    },
-    {
-        id = "cargo-deny-check-advisories",
-        name = "cargo deny check advisories",
-        language = "system",
-        entry = "cargo deny check advisories",
-        files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml", "**/deny.toml"] },
-        pass_filenames = false,
-        priority = 0,
-    }
+  {
+    id = "cargo-fmt",
+    name = "cargo fmt",
+    language = "system",
+    entry = "cargo fmt --all",
+    files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
+    pass_filenames = false,
+    priority = 10, # modifies files - must be only hook to modify files at this priority
+  },
+  {
+    id = "cargo-sort",
+    name = "cargo sort",
+    language = "system",
+    entry = "cargo sort --grouped --workspace",
+    files.glob = ["**/Cargo.toml"],
+    pass_filenames = false,
+    priority = 15 # modifies files - must be only hook to modify files at this priority
+  },
+  {
+    id = "cargo-clippy",
+    name = "cargo clippy pedantic",
+    language = "system",
+    entry = "cargo clippy --verbose --all-targets -- -D warnings -W clippy::pedantic",
+    files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
+    pass_filenames = false,
+    priority = 0,
+  },
+  {
+    id = "cargo-machete",
+    name = "cargo machete",
+    language = "system",
+    entry = "cargo machete",
+    files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
+    pass_filenames = false,
+    priority = 0,
+  },
+  {
+    id = "cargo-deny-check-advisories",
+    name = "cargo deny check advisories",
+    language = "system",
+    entry = "cargo deny check advisories",
+    files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml", "**/deny.toml"] },
+    pass_filenames = false,
+    priority = 0,
+  }
 ]
