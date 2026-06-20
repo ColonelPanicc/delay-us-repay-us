@@ -86,7 +86,7 @@ mod tests {
         assert_eq!(route.operator.short_code, "GA");
         assert_eq!(route.operator.full_name, "Greater Anglia");
         assert_eq!(route.operator.delay_repay_mode, DelayRepayScheme::DR15);
-        assert_eq!(route.stops.iter().count(), 3);
+        assert_eq!(route.stops.len(), 3);
     }
 
     #[test]
