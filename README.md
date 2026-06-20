@@ -30,6 +30,7 @@ You may need to install some tools that `prek` runs, for example
 ```bash
 cargo install --locked cargo-deny
 cargo install --locked cargo-machete
+cargo install --locked cargo-sort
 ```
 
 ### DURU CLI
