@@ -1,14 +1,16 @@
+mod completions;
 mod data_cache_dir;
 mod uk_stations;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
-use crate::{Commands::UkStations, uk_stations::UkStationCommand};
+use crate::{completions::CompletionsCommand, uk_stations::UkStationCommand};
 
 /// A CLI to enable devs to trigger actions within DURU easily.
 ///
-/// Devs can run locally from the repo root directory with `cargo r -p duru-cli -- --help`
+/// Devs can run locally from the repo root directory with `cargo r -p duru-cli -- --help`,
+/// or with the provided cargo alias `cargo duru --help`.
 #[derive(Parser)]
 #[command(version, arg_required_else_help = true)]
 struct Cli {
@@ -24,14 +26,21 @@ struct Cli {
 /// The set of actions runnable from the CLI.
 #[derive(Subcommand)]
 enum Commands {
-    #[clap(visible_alias("uk"))]
+    #[command(subcommand_negates_reqs(true))]
+    Completions(CompletionsCommand),
+
+    #[command(visible_alias("uk"))]
     UkStations(UkStationCommand),
 }
 
 impl Commands {
     fn execute(self, dry_run: bool) -> Result<()> {
         match self {
-            UkStations(cmd) => cmd.execute(dry_run),
+            Commands::Completions(cmd) => {
+                cmd.execute();
+                Ok(())
+            }
+            Commands::UkStations(cmd) => cmd.execute(dry_run),
         }
     }
 }
