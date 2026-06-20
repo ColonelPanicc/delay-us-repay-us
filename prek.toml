@@ -38,7 +38,7 @@ hooks = [
         entry = "cargo sort --grouped --workspace",
         files.glob = ["**/Cargo.toml"],
         pass_filenames = false,
-        priority = 15
+        priority = 15 # modifies files - must be only hook to modify files at this priority
     },
     {
         id = "cargo-clippy",

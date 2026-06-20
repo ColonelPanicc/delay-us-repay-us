@@ -1,3 +1,0 @@
-# tomlfmt.toml
-# Allows cargo-sort to recognize line breaks as group boundary markers
-key_value_newlines = true
