@@ -22,3 +22,6 @@ target
 
 # llvm-cov outputs
 coverage/
+
+# .env files
+.env

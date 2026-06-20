@@ -1,0 +1,16 @@
+[package]
+name = "datastore"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow.workspace = true
+dotenvy.workspace = true
+sqlx = {
+  workspace = true,
+  features = ["macros", "migrate", "runtime-tokio", "sqlite"]
+}
+
+[dev-dependencies]
+pretty_assertions.workspace = true
+tokio = { workspace = true, features = ["macros"] }
