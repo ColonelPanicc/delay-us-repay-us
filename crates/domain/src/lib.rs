@@ -7,17 +7,17 @@ pub struct RailwayStation {
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
-pub enum DelayRepayScheme {
+pub enum DelayRepayMode {
     DR15,
     DR30,
 }
 
-impl DelayRepayScheme {
+impl DelayRepayMode {
     #[must_use]
     pub fn minimum_delay(self) -> Duration {
         match self {
-            DelayRepayScheme::DR15 => Duration::from_mins(15),
-            DelayRepayScheme::DR30 => Duration::from_mins(30),
+            DelayRepayMode::DR15 => Duration::from_mins(15),
+            DelayRepayMode::DR30 => Duration::from_mins(30),
         }
     }
 }
@@ -26,7 +26,7 @@ impl DelayRepayScheme {
 pub struct RailwayOperator {
     pub short_code: String,
     pub full_name: String,
-    pub delay_repay_mode: DelayRepayScheme,
+    pub delay_repay_mode: DelayRepayMode,
 }
 
 #[derive(Clone, Debug)]
@@ -39,7 +39,7 @@ pub struct Route {
 
 #[cfg(test)]
 mod tests {
-    use crate::{DelayRepayScheme, RailwayOperator, RailwayStation, Route};
+    use crate::{DelayRepayMode, RailwayOperator, RailwayStation, Route};
     use pretty_assertions::assert_eq;
     use std::time::Duration;
 
@@ -71,7 +71,7 @@ mod tests {
         let operator = RailwayOperator {
             short_code: "GA".to_string(),
             full_name: "Greater Anglia".to_string(),
-            delay_repay_mode: DelayRepayScheme::DR15,
+            delay_repay_mode: DelayRepayMode::DR15,
         };
 
         let route = Route {
@@ -85,14 +85,14 @@ mod tests {
         assert_eq!(route.terminus.full_name, "Shenfield");
         assert_eq!(route.operator.short_code, "GA");
         assert_eq!(route.operator.full_name, "Greater Anglia");
-        assert_eq!(route.operator.delay_repay_mode, DelayRepayScheme::DR15);
+        assert_eq!(route.operator.delay_repay_mode, DelayRepayMode::DR15);
         assert_eq!(route.stops.len(), 3);
     }
 
     #[test]
     fn dr15_applies_from_15_mins_delay() {
         assert_eq!(
-            DelayRepayScheme::DR15.minimum_delay(),
+            DelayRepayMode::DR15.minimum_delay(),
             Duration::from_mins(15)
         );
     }
@@ -100,7 +100,7 @@ mod tests {
     #[test]
     fn dr30_applies_from_30_mins_delay() {
         assert_eq!(
-            DelayRepayScheme::DR30.minimum_delay(),
+            DelayRepayMode::DR30.minimum_delay(),
             Duration::from_mins(30)
         );
     }
