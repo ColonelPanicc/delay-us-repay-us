@@ -4,7 +4,6 @@ members = ["crates/duru-cli", "crates/data-ingest", "crates/domain"]
 
 [workspace.dependencies]
 domain.path = "crates/domain"
-
 anyhow = "1.0.102"
 clap = "4.6.1"
 clap_complete = "4.6.5"
