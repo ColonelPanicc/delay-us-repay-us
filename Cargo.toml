@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/duru-cli", "crates/data-ingest", "crates/example-crate", "crates/domain"]
+members = ["crates/duru-cli", "crates/data-ingest", "crates/domain"]
 
 [workspace.dependencies]
 domain.path = "crates/domain"
