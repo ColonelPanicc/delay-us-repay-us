@@ -78,7 +78,7 @@ mod tests {
             starting_station: start.clone(),
             terminus: end.clone(),
             operator,
-            stops: vec![start.clone(), mid.clone(), end.clone()],
+            stops: vec![start, mid, end],
         };
 
         assert_eq!(route.starting_station.full_name, "London Liverpool Street");
