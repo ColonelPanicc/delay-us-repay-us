@@ -235,6 +235,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 
 [[package]]
+name = "data-ingest"
+version = "0.1.0"
+dependencies = [
+ "domain",
+]
+
+[[package]]
 name = "diff"
 version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -249,6 +256,13 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "domain"
+version = "0.1.0"
+dependencies = [
+ "pretty_assertions",
 ]
 
 [[package]]
@@ -283,13 +297,6 @@ name = "equivalent"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
-
-[[package]]
-name = "example-crate"
-version = "0.1.0"
-dependencies = [
- "pretty_assertions",
-]
 
 [[package]]
 name = "find-msvc-tools"
