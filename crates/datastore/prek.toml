@@ -1,0 +1,13 @@
+[[repos]]
+repo = "local"
+hooks = [
+  {
+    id = "sqlx-prepare-check",
+    name = "sqlx prepare check",
+    language = "system",
+    entry = "cargo sqlx prepare --check",
+    files = { glob = ["**/*.rs", "**/*.sql", ".sqlx/**"] },
+    pass_filenames = false,
+    priority = 0,
+  }
+]

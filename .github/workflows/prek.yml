@@ -36,3 +36,5 @@ jobs:
               uses: taiki-e/install-action@cargo-sort
             - name: Run Prek
               uses: j178/prek-action@v2
+              with:
+                  extra-args: "--all-files --skip sqlx-prepare-check"

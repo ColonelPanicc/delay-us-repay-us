@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM stations WHERE crs = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "e479468f3efaf02ad541e1e938788a700e80dd5414ae0b4941a878a91fb104d8"
+}
