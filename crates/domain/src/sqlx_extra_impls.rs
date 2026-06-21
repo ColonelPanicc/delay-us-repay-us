@@ -35,6 +35,12 @@ where
     }
 }
 
+impl From<String> for RailwayStationId {
+    fn from(s: String) -> Self {
+        string_to_railway_station_id(&s).expect("infallible conversion provided only for sqlx compile-time query checks - conversion remains fallible")
+    }
+}
+
 pub(crate) fn string_to_railway_station_id(s: &str) -> Result<RailwayStationId> {
     if s.len() != 3 {
         anyhow::bail!("expected length 3 but string was {s}");

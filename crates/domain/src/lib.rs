@@ -3,17 +3,9 @@ pub mod sqlx_extra_impls;
 
 use std::time::Duration;
 
-use crate::sqlx_extra_impls::string_to_railway_station_id;
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "sqlx", derive(sqlx::FromRow))]
 pub struct RailwayStationId(pub [char; 3]);
-
-impl From<String> for RailwayStationId {
-    fn from(s: String) -> Self {
-        string_to_railway_station_id(&s).expect("infallible conversion provided only for sqlx compile-time query checks - conversion remains fallible")
-    }
-}
 
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "sqlx", derive(sqlx::FromRow))]

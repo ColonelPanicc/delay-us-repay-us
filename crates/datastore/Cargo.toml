@@ -4,8 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-anyhow.workspace = true
 domain = { workspace = true, features = ["sqlx"] }
+
+anyhow.workspace = true
 dotenvy.workspace = true
 sqlx = { workspace = true, features = ["macros", "migrate", "runtime-tokio", "sqlite"] }
 trait-variant.workspace = true
