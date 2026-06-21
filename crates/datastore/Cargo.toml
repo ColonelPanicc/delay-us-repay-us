@@ -5,11 +5,10 @@ edition = "2024"
 
 [dependencies]
 anyhow.workspace = true
+domain = { workspace = true, features = ["sqlx"] }
 dotenvy.workspace = true
-sqlx = {
-  workspace = true,
-  features = ["macros", "migrate", "runtime-tokio", "sqlite"]
-}
+sqlx = { workspace = true, features = ["macros", "migrate", "runtime-tokio", "sqlite"] }
+trait-variant.workspace = true
 
 [dev-dependencies]
 pretty_assertions.workspace = true

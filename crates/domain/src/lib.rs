@@ -1,9 +1,31 @@
+#[cfg(feature = "sqlx")]
+pub mod sqlx_extra_impls;
+
 use std::time::Duration;
 
-#[derive(Clone, Debug)]
+use crate::sqlx_extra_impls::string_to_railway_station_id;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "sqlx", derive(sqlx::FromRow))]
 pub struct RailwayStationId(pub [char; 3]);
 
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+impl From<String> for RailwayStationId {
+    fn from(s: String) -> Self {
+        string_to_railway_station_id(&s).expect("infallible conversion provided only for sqlx compile-time query checks - conversion remains fallible")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "sqlx", derive(sqlx::FromRow))]
+pub struct RailwayStation {
+    #[cfg_attr(feature = "sqlx", sqlx(rename = "crs"))]
+    pub id: RailwayStationId,
+    pub name: String,
+    pub lat: f64,
+    pub lon: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DelayRepayMode {
     DR15,
     DR30,
@@ -19,14 +41,14 @@ impl DelayRepayMode {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone)]
 pub struct RailwayOperator {
     pub short_code: String,
     pub full_name: String,
     pub delay_repay_mode: DelayRepayMode,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone)]
 pub struct Route {
     pub starting_station: RailwayStationId,
     pub terminus: RailwayStationId,
@@ -59,8 +81,8 @@ mod tests {
         };
 
         let route = Route {
-            starting_station: start.clone(),
-            terminus: end.clone(),
+            starting_station: start,
+            terminus: end,
             operator,
             stops: vec![start, mid, end],
         };

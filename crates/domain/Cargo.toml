@@ -3,5 +3,10 @@ name = "domain"
 version = "0.1.0"
 edition = "2024"
 
+[features]
+sqlx = ["dep:sqlx"]
+
 [dependencies]
+anyhow.workspace = true
 pretty_assertions.workspace = true
+sqlx = { workspace = true, optional = true }
