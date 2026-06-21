@@ -24,6 +24,6 @@ Must be claimed within 28 days of the delayed journey.
 ## Where to claim
 - Through website of train operator travelled with.
 
-## Source:
-- https://dataportal.orr.gov.uk/media/mzqfyttn/delay-compensation-claims-factsheet-2025-26-rail-periods-1-4.pdf
-- https://tfl.gov.uk/fares/refunds/apply-for-a-service-delay-refund
+## Sources
+- [Delay Compensation Claims Fact Sheet](https://dataportal.orr.gov.uk/media/mzqfyttn/delay-compensation-claims-factsheet-2025-26-rail-periods-1-4.pdf)
+- [TFL Service Delay Refund](https://tfl.gov.uk/fares/refunds/apply-for-a-service-delay-refund)
