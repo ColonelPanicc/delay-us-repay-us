@@ -1,0 +1,62 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT crs as id, name, lat, lon FROM stations WHERE crs = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "stations",
+            "name": "crs"
+          }
+        }
+      },
+      {
+        "name": "name",
+        "ordinal": 1,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "stations",
+            "name": "name"
+          }
+        }
+      },
+      {
+        "name": "lat",
+        "ordinal": 2,
+        "type_info": "Float",
+        "origin": {
+          "Table": {
+            "table": "stations",
+            "name": "lat"
+          }
+        }
+      },
+      {
+        "name": "lon",
+        "ordinal": 3,
+        "type_info": "Float",
+        "origin": {
+          "Table": {
+            "table": "stations",
+            "name": "lon"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "a9a2b7d87a158168a72ab45b126d023e0646d56d865bd42e0df09e4a539af7d7"
+}

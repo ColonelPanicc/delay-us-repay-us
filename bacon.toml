@@ -1,0 +1,8 @@
+#:tombi schema.strict = false
+
+[jobs.clippy-pedant]
+command = ["cargo", "clippy", "--all-targets", "--", "-W", "clippy::pedantic"]
+need_stdout = false
+
+[keybindings]
+p = "job:clippy-pedant"

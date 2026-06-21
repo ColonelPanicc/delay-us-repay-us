@@ -44,7 +44,7 @@ hooks = [
     id = "cargo-clippy",
     name = "cargo clippy pedantic",
     language = "system",
-    entry = "cargo clippy --verbose --all-targets -- -D warnings -W clippy::pedantic",
+    entry = "cargo clippy --all-targets -- -D warnings -W clippy::pedantic",
     files = { glob = ["**/*.rs", "crates/**", "**/Cargo.toml", "**/Cargo.lock", "**/rust-toolchain.toml"] },
     pass_filenames = false,
     priority = 0,
