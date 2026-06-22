@@ -16,6 +16,9 @@ pub(crate) static MIGRATOR: Migrator = sqlx::migrate!();
 /// A trait to group together the more specialised data store traits into a single named trait for easy use in trait bounds.
 pub trait RailwayDataStore: RailwayStationDataStore {}
 
+/// Blanket implementation for structs that implement all the requirements for the [`RailwayDataStore`] grouped trait.
+impl<T> RailwayDataStore for T where T: RailwayStationDataStore {}
+
 #[derive(Debug)]
 pub struct DataStore {
     pool: SqlitePool,
