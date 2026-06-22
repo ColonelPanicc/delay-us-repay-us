@@ -3,7 +3,18 @@ pub mod stations;
 use std::{path::PathBuf, str::FromStr};
 
 use anyhow::Result;
-use sqlx::sqlite::{SqliteConnectOptions, SqlitePool};
+use sqlx::{
+    migrate::Migrator,
+    sqlite::{SqliteConnectOptions, SqlitePool},
+};
+
+use crate::stations::RailwayStationDataStore;
+
+/// A shared migrator for prod and tests to use, without duplicating the codegen.
+pub(crate) static MIGRATOR: Migrator = sqlx::migrate!();
+
+/// A trait to group together the more specialised data store traits into a single named trait for easy use in trait bounds.
+pub trait RailwayDataStore: RailwayStationDataStore {}
 
 #[derive(Debug)]
 pub struct DataStore {
@@ -14,7 +25,7 @@ impl DataStore {
     async fn new_for_db_url(database_url: &str) -> Result<Self> {
         let options = SqliteConnectOptions::from_str(database_url)?.create_if_missing(true);
         let pool = SqlitePool::connect_with(options).await?;
-        sqlx::migrate!().run(&pool).await?;
+        MIGRATOR.run(&pool).await?;
         Ok(DataStore { pool })
     }
 
@@ -33,20 +44,5 @@ impl DataStore {
         let database_url = dotenvy::var("DATABASE_URL")?;
 
         Self::new_for_db_url(&database_url).await
-    }
-}
-
-#[cfg(test)]
-mod test_impl {
-    use super::*;
-
-    impl DataStore {
-        /// Create a new instance using a hardcoded database url that is used only for testing.
-        ///
-        /// # Errors
-        /// May fail to connect to the database or run its migrations.
-        pub async fn new_for_tests() -> Result<Self> {
-            Self::new_for_db_url("sqlite:duru-test.db").await
-        }
     }
 }
