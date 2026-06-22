@@ -16,7 +16,7 @@ pub trait RailwayStationDataStore {
     ///
     /// # Errors
     /// May fail to execute the upsert query.
-    async fn upsert_station(&self, station: RailwayStation) -> Result<()>;
+    async fn upsert_station(&self, station: &RailwayStation) -> Result<()>;
 
     /// Delete a single station.
     ///
@@ -43,13 +43,13 @@ impl RailwayStationDataStore for DataStore {
         Ok(station)
     }
 
-    async fn upsert_station(&self, station: RailwayStation) -> Result<()> {
+    async fn upsert_station(&self, station: &RailwayStation) -> Result<()> {
         sqlx::query!(
             "INSERT OR REPLACE INTO stations (crs, name, lat, lon) VALUES (?, ?, ?, ?)",
-            &station.id,
-            &station.name,
-            &station.lat,
-            &station.lon,
+            station.id,
+            station.name,
+            station.lat,
+            station.lon,
         )
         .execute(&self.pool)
         .await?;
@@ -75,52 +75,142 @@ impl RailwayStationDataStore for DataStore {
 mod tests {
     use super::*;
     use pretty_assertions::assert_eq;
+    use sqlx::SqlitePool;
 
-    #[tokio::test]
-    async fn stations() -> Result<()> {
-        let store = DataStore::new_for_tests().await?;
-        store.delete_all_stations().await?;
+    const ID_ABC: RailwayStationId = RailwayStationId(['A', 'B', 'C']);
+    const ID_DEF: RailwayStationId = RailwayStationId(['D', 'E', 'F']);
 
-        let id_abc = RailwayStationId(['a', 'b', 'c']);
-        assert_eq!(None, store.get_station(id_abc).await?);
+    #[sqlx::test(migrator = "crate::MIGRATOR")]
+    async fn upsert_then_get(pool: SqlitePool) -> Result<()> {
+        let store = DataStore { pool };
 
-        let id_def = RailwayStationId(['d', 'e', 'f']);
+        assert_eq!(None, store.get_station(ID_ABC).await?);
 
-        let initial_abc = RailwayStation {
-            id: id_abc,
-            name: "Initial ABC".to_owned(),
+        let station_abc = RailwayStation {
+            id: ID_ABC,
+            name: "Station ABC".to_owned(),
             lat: 1.0,
             lon: 1.1,
         };
-        store.upsert_station(initial_abc.clone()).await?;
+        store.upsert_station(&station_abc).await?;
 
-        store
-            .upsert_station(RailwayStation {
-                id: id_def,
-                name: "Initial DEF".to_owned(),
-                lat: 0.0,
-                lon: 0.1,
-            })
-            .await?;
+        assert_eq!(Some(station_abc), store.get_station(ID_ABC).await?);
 
-        let fetched_abc = store.get_station(id_abc).await?;
-        assert_eq!(Some(initial_abc), fetched_abc);
+        Ok(())
+    }
 
-        let replacement_abc = RailwayStation {
-            id: id_abc,
-            name: "Replacement ABC".to_owned(),
-            lat: 2.0,
-            lon: 2.1,
+    #[sqlx::test(migrator = "crate::MIGRATOR")]
+    async fn upsert_then_get_two(pool: SqlitePool) -> Result<()> {
+        let store = DataStore { pool };
+
+        assert_eq!(None, store.get_station(ID_ABC).await?);
+        assert_eq!(None, store.get_station(ID_DEF).await?);
+
+        let station_abc = RailwayStation {
+            id: ID_ABC,
+            name: "Station ABC".to_owned(),
+            lat: 1.0,
+            lon: 1.1,
         };
-        store.upsert_station(replacement_abc.clone()).await?;
+        store.upsert_station(&station_abc).await?;
 
-        let fetched_replacement_abc = store.get_station(id_abc).await?;
-        assert_eq!(Some(replacement_abc), fetched_replacement_abc);
+        let station_def = RailwayStation {
+            id: ID_DEF,
+            name: "Station DEF".to_owned(),
+            lat: 2.5,
+            lon: 2.6,
+        };
+        store.upsert_station(&station_def).await?;
 
-        store.delete_station(id_def).await?;
-        assert!(store.get_station(id_abc).await?.is_some());
-        store.delete_station(id_abc).await?;
-        assert!(store.get_station(id_abc).await?.is_none());
+        assert_eq!(Some(station_abc), store.get_station(ID_ABC).await?);
+        assert_eq!(Some(station_def), store.get_station(ID_DEF).await?);
+
+        Ok(())
+    }
+
+    #[sqlx::test(migrator = "crate::MIGRATOR")]
+    async fn replace_existing(pool: SqlitePool) -> Result<()> {
+        let store = DataStore { pool };
+
+        let station_abc = RailwayStation {
+            id: ID_ABC,
+            name: "Station ABC".to_owned(),
+            lat: 1.0,
+            lon: 1.1,
+        };
+        store.upsert_station(&station_abc).await?;
+        assert_eq!(Some(station_abc), store.get_station(ID_ABC).await?);
+
+        let station_abc_updated = RailwayStation {
+            id: ID_ABC,
+            name: "Station ABC Updated".to_owned(),
+            lat: 0.1234,
+            lon: 0.5678,
+        };
+        store.upsert_station(&station_abc_updated).await?;
+        assert_eq!(Some(station_abc_updated), store.get_station(ID_ABC).await?);
+
+        Ok(())
+    }
+
+    #[sqlx::test(migrator = "crate::MIGRATOR")]
+    async fn delete_one(pool: SqlitePool) -> Result<()> {
+        let store = DataStore { pool };
+
+        let station_abc = RailwayStation {
+            id: ID_ABC,
+            name: "Station ABC".to_owned(),
+            lat: 1.0,
+            lon: 1.1,
+        };
+        store.upsert_station(&station_abc).await?;
+
+        let station_def = RailwayStation {
+            id: ID_DEF,
+            name: "Station DEF".to_owned(),
+            lat: 2.5,
+            lon: 2.6,
+        };
+        store.upsert_station(&station_def).await?;
+
+        assert!(store.get_station(ID_ABC).await?.is_some());
+        assert!(store.get_station(ID_DEF).await?.is_some());
+
+        store.delete_station(ID_ABC).await?;
+
+        assert!(store.get_station(ID_ABC).await?.is_none());
+        assert!(store.get_station(ID_DEF).await?.is_some());
+
+        Ok(())
+    }
+
+    #[sqlx::test(migrator = "crate::MIGRATOR")]
+    async fn delete_all(pool: SqlitePool) -> Result<()> {
+        let store = DataStore { pool };
+
+        let station_abc = RailwayStation {
+            id: ID_ABC,
+            name: "Station ABC".to_owned(),
+            lat: 1.0,
+            lon: 1.1,
+        };
+        store.upsert_station(&station_abc).await?;
+
+        let station_def = RailwayStation {
+            id: ID_DEF,
+            name: "Station DEF".to_owned(),
+            lat: 2.5,
+            lon: 2.6,
+        };
+        store.upsert_station(&station_def).await?;
+
+        assert!(store.get_station(ID_ABC).await?.is_some());
+        assert!(store.get_station(ID_DEF).await?.is_some());
+
+        store.delete_all_stations().await?;
+
+        assert!(store.get_station(ID_ABC).await?.is_none());
+        assert!(store.get_station(ID_DEF).await?.is_none());
 
         Ok(())
     }
