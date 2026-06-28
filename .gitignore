@@ -24,4 +24,4 @@ target
 coverage/
 
 # .env files
-.env
+*.env
