@@ -23,5 +23,9 @@ target
 # llvm-cov outputs
 coverage/
 
+# Data files
+*.zip
+crates/duru-cli/input/
+
 # .env files
 .env

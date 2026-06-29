@@ -1,11 +1,15 @@
 mod completions;
 mod data_cache_dir;
+mod delays;
+mod input_dir;
 mod uk_stations;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
-use crate::{completions::CompletionsCommand, uk_stations::UkStationCommand};
+use crate::{
+    completions::CompletionsCommand, delays::DelaysCommand, uk_stations::UkStationCommand,
+};
 
 /// A CLI to enable devs to trigger actions within DURU easily.
 ///
@@ -31,6 +35,9 @@ enum Commands {
 
     #[command(visible_alias("uk"))]
     UkStations(UkStationCommand),
+
+    #[command(visible_alias("delay"))]
+    Delays(DelaysCommand),
 }
 
 impl Commands {
@@ -41,6 +48,7 @@ impl Commands {
                 Ok(())
             }
             Commands::UkStations(cmd) => cmd.execute(dry_run),
+            Commands::Delays(cmd) => cmd.execute(dry_run),
         }
     }
 }

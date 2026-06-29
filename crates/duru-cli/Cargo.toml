@@ -4,9 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+nwr-delay-attribution-ingest.workspace = true
+
 anyhow.workspace = true
 clap = { workspace = true, features = ["derive"] }
 clap_complete.workspace = true
+csv.workspace = true
 reqwest = { workspace = true, features = ["blocking"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
