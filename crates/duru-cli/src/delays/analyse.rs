@@ -20,12 +20,20 @@ pub struct Analyse {
 
 impl Analyse {
     pub fn execute(self, dry_run: bool) -> anyhow::Result<()> {
+        let files = fs::read_dir(INPUT_DIR.as_path())?;
+
         if dry_run {
+            files.for_each(|entry| {
+                println!(
+                    "Would attempt to analyse {}",
+                    entry.unwrap().path().display()
+                );
+            });
             return Ok(());
         }
 
         print_table_header_to_console();
-        for file in fs::read_dir(INPUT_DIR.as_path())? {
+        for file in files {
             if file.is_ok() {
                 let path = file?.path();
                 parse_csv(path.as_path())
@@ -59,6 +67,7 @@ impl Analyse {
 fn print_table_header_to_console() {
     println!("Operator,TrainServiceCode,OriginLocationCode,DestLocationCode,DelayMins");
 }
+
 fn print_record_to_console(record: &DelayAttributionRecord) {
     println!(
         "{},{},{},{},{}",
