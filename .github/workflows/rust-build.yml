@@ -13,22 +13,20 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Update Rust
-              run: rustup update stable
-            - name: Checkout code
-              uses: actions/checkout@v6
-            - name: Use dependencies cache
-              uses: actions/cache@v5
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - uses: dtolnay/rust-toolchain@stable
+
+            - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
               with:
-                  path: |
-                      ~/.cargo/bin/
-                      ~/.cargo/registry/index/
-                      ~/.cargo/registry/cache/
-                      ~/.cargo/git/db/
-                      target/
-                  key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-                  restore-keys: ${{ runner.os }}-cargo-
-            - name: Install cargo-nextest
-              uses: taiki-e/install-action@nextest
-            - name: Test
-              run: cargo nextest run --verbose # does not run doc tests
+                  save-if: ${{ github.ref == 'refs/heads/main' }}
+
+            - uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
+              with:
+                  tool: nextest
+
+            - name: Tests
+              run: cargo nextest run # does not run doc tests
+
+            - name: Doc tests (not run by nextest)
+              run: cargo test --doc --workspace --all-features
