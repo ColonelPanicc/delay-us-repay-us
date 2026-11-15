@@ -2,9 +2,7 @@ name: CI
 
 on:
     push:
-        branches: ["main"]
-    pull_request:
-        branches: ["main"]
+        paths-ignore: ["**.md"]
     workflow_dispatch:
 
 env:
@@ -14,45 +12,11 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
+permissions:
+    contents: read
+
 jobs:
-    detect-changes:
-        name: Detect file changes
-        runs-on: ubuntu-slim
-        permissions:
-            contents: read
-            pull-requests: read
-
-        outputs:
-            rust-build: ${{ steps.filter.outputs.rust-build }}
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v6
-            - name: Detect changes
-              uses: dorny/paths-filter@v4
-              id: filter
-              with:
-                  filters: |
-                      rust-code: &rust-code
-                          - '**/*.rs'
-
-                      rust-crates: &rust-crates
-                          - '**/Cargo.toml'
-                          - '**/Cargo.lock'
-                          - 'crates/**'
-                          - *rust-code
-
-                      rust-tool-configs: &rust-tool-configs
-                          - '**/deny.toml'
-
-                      rust-build:
-                          - '**/rust-build.yml'
-                          - *rust-crates
-                          - *rust-tool-configs
-
     rust-build:
-        needs: detect-changes
-        if: ${{ github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.rust-build == 'true' }}
         uses: ./.github/workflows/rust-build.yml
 
     prek:
@@ -60,12 +24,14 @@ jobs:
 
     success:
         name: Check success
-        needs: [detect-changes, rust-build, prek]
+        needs: [rust-build, prek]
         if: always()
         runs-on: ubuntu-slim
+        env:
+            NEEDS: ${{ toJSON(needs) }}
         steps:
             - name: Print all results
-              run: echo '${{ toJSON(needs) }}'
+              run: echo "$NEEDS"
             - name: Exit if any failures or cancellations
               if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
               run: exit 1
